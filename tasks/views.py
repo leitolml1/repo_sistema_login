@@ -1,12 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.contrib.auth import login
 from django.http import HttpResponse
 # Create your views here.
 
-def hellworld(request):
-    return render(request,"signup.html",{
-        'form':UserCreationForm()
+def home(request):
+    return render(request,"home.html",{
     })
 
 def signup(request):
@@ -19,9 +19,26 @@ def signup(request):
             try:
                 user=User.objects.create_user(username=request.POST["username"],password=request.POST["password1"])
                 user.save()
-                return HttpResponse("Se ha creado el usario exitosamente!")
+                login(request,user)
+                return redirect("tasks")
             except:
-                return HttpResponse("Ese nombre de usario ya existe!")
-        else:
 
-            return HttpResponse("Las contraseñas no coinciden")
+               return render(request,"signup.html",{
+                'form':UserCreationForm(),
+                "error":"Error ese nombre de usuario  ya ha sido registrado!"
+                })
+        else:
+            return render(request,"signup.html",{
+                'form':UserCreationForm(),
+                "error":"Error las contraseñas no coinciden!"
+                })
+
+def tasks(request):
+    return render(request,"tasks.html",{
+
+    })
+
+def logout(request):
+    return render(request,"",{
+        
+    })

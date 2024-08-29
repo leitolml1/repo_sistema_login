@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth.models import User
-from django.contrib.auth import login
+from django.contrib.auth import login,logout,authenticate
 from django.http import HttpResponse
 # Create your views here.
 
@@ -38,7 +38,22 @@ def tasks(request):
 
     })
 
-def logout(request):
-    return render(request,"",{
-        
-    })
+def signout(request):
+    logout(request)
+    return redirect("home")
+
+def signin(request):
+    if request.method=="POST":
+        user=authenticate(request,username=request.POST["username"],password=request.POST["password"])
+        if user is None:            
+            return render(request,"signin.html",{
+                "form":AuthenticationForm(),
+                "error":"Contraseña o usario incorrectos!"
+            })
+        else:
+            login(request,user)
+            return redirect("tasks")
+    else:
+        return render(request,"signin.html",{
+            "form":AuthenticationForm()
+        })

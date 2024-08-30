@@ -10,3 +10,6 @@ class Taks(models.Model):
     fecha_completada=models.DateTimeField(null=True)
     tarea_importante=models.BooleanField(default=False)
     usuario=models.ForeignKey(User,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.titulo +"-por " + self.user.username

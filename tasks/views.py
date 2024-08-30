@@ -57,3 +57,8 @@ def signin(request):
         return render(request,"signin.html",{
             "form":AuthenticationForm()
         })
+
+def create_task(request):
+    return render(request,"create_task.html",{
+        
+    })
